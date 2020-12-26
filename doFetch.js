@@ -19,8 +19,8 @@ An object to send, save & describe the data
 Parameters 候选参数
 	"method": ["POST","GET"]
 	"Content-Type": ["x-www-form-urlencoded","Form Data","json"]
-data to send / receive stores in
 
+data to send / receive stores in
 数据发送/接收储存位置
 	obj.request/response.data
 */
