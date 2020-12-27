@@ -135,7 +135,7 @@ function changeForm(obj, header){
 		for ( [k, v] of Object.entries(obj.request.data)){
 			formdata.set(`${k}`,`${v}`);
 		};
-		//header.headers['Content-Type']='Form Data';
+		header.headers['Content-Type']='Form Data';
 	}else if(obj.request.header['Content-Type']=='x-www-form-urlencoded'){
 		formdata=[];
 		let arr=[];
