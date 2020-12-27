@@ -1,4 +1,4 @@
-/*\	
+/*\
 | | Let's say you have some data to send.
 | | Either POST or GET, doesn't matter.
 | | Here I'd make an object pass the data.
@@ -12,13 +12,13 @@
 | | 因此，我先介绍一下我对象的结构。
 \*/
 
-/* 
+/*
 An object to send, save & describe the data
-以下先创建一个对象，用于发送，保存和描述该对象 
+以下先创建一个对象，用于发送，保存和描述该对象
 
 Parameters 候选参数
 	"method": ["POST","GET"]
-	"Content-Type": ["x-www-form-urlencoded","Form Data","json"]
+	"Content-Type": ["x-www-form-urlencoded","form data","json"]
 
 data to send / receive stores in
 数据发送/接收储存位置
@@ -26,21 +26,27 @@ data to send / receive stores in
 */
 
 function someApp(){
-	let appObj={
+	let data={
+		"admin": "Jason Stand",
+		"token": "pass&1609070883698",
+		"filter" : {
+			"order": "id",
+			"limit": 10,
+			"keywords": "drink&some food",
+			"column": ["name", "age"]
+		}
+	};
+	let queryObj={
 		"request": {
 			"method":	"POST",
-			"url": "https://example.com/queryCustomerInfo.json",
+			"url": "https://example.com/queryCustomerInfo.php",
 			"header": {
-				"Content-Type": "json"
+				"Content-Type": "x-www-form-urlencoded",
+				"headers": {
+					"csrf-token":"cs123"
+				}
 			},
-			"data": {
-					"customerId": "",
-					"token": "",
-					"filter" : {
-						"order": "id",
-						"limit": 10
-					}
-			}
+			"data": data
 		},
 		"response": {
 			"data": {}
@@ -51,11 +57,11 @@ function someApp(){
 			"name": "findMyCustomer"
 		}
 	};
-	let url=appObj.request.url;
+	let url=queryObj.request.url;
 	(async function (){
-		await doFetch(appObj, url);
-		appObj.response.data=result;
-		//console.log(appObj);
+		await doFetch(queryObj, url);
+		queryObj.response.data=result;
+		console.log(queryObj);
 	})();
 };
 
@@ -66,10 +72,11 @@ functions to help you send and receive the data
 
 async function doFetch(obj, url){
 	let method=obj.request.method;
-	let header = {method: method};
+	let header = {
+		'method': method
+	};
 	if (method==='POST'){
 		changeForm(obj, header);
-		header.body=formdata;
 	}else if(method==='GET'){
 		if (url.match(/\?/)==null){
 			let parameters='';
@@ -83,14 +90,14 @@ async function doFetch(obj, url){
 		};
 	};
 	if (typeof(url)=='undefined'){
-		result='failed';
+		result='url undefined';
 		return result;
 	}else{
 		try{
 			response = await fetch(url, header);
 			if(!response.ok){
 				console.log('response not ok');
-				result='NotMyType';
+				result='bad response';
 			}else{
 				//console.log('response is ok');
 				let isRedirected = response.redirected;
@@ -130,14 +137,14 @@ type transforms automatically
 function changeForm(obj, header){
 	header.headers={};
 	(obj.request.header.headers)? header.headers=obj.request.header.headers: false;
-	if (obj.request.header['Content-Type']=='Form Data'){
-		formdata = new FormData();
-		for ( [k, v] of Object.entries(obj.request.data)){
-			formdata.set(`${k}`,`${v}`);
-		};
-		header.headers['Content-Type']='Form Data';
-	}else if(obj.request.header['Content-Type']=='x-www-form-urlencoded'){
-		formdata=[];
+	if(obj.request.header['Content-Type']=='json'){
+		header.headers['Content-Type']='application/json';
+		let bodyData='';
+		bodyData=JSON.stringify(obj.request.data);
+		header.body=bodyData;
+	}else if((obj.request.header['Content-Type']).toLowerCase()=='x-www-form-urlencoded'){
+		header.headers['Content-Type']='application/x-www-form-urlencoded';
+		let bodyData='';
 		let arr=[];
 		for ([k,v] of Object.entries(obj.request.data)){
 			if (typeof(v)=='object'){
@@ -146,10 +153,18 @@ function changeForm(obj, header){
 				arr.push(encodeURIComponent(k)+'='+encodeURIComponent(v));
 			};
 		};
-		formdata=arr.join('&');
-		header.headers['Content-Type']='application/x-www-form-urlencoded';
-	}else if(obj.request.header['Content-Type']=='json'){
-		formdata=JSON.stringify(obj.request.data);
-		header.headers['Content-Type']='application/json';
+		bodyData=arr.join('&');
+		header.body=bodyData;
+	}else if ((obj.request.header['Content-Type']).toLowerCase()=='form data'){
+		header.headers['Content-Type']='Form Data';
+		let bodyData = new FormData();
+		for ( [k, v] of Object.entries(obj.request.data)){
+			if (typeof(v)=='object'){
+				bodyData.set(`${k}`,`${JSON.stringify(v)}`);
+			}else{
+				bodyData.set(`${k}`,`${v}`);
+			};
+		};
+		header.body=bodyData;
 	};
 };
