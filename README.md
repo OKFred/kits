@@ -1,5 +1,4 @@
-# network
-network handler 网络通信
+# Javascript kits
 
-To make it easier to handle network request anywhere
-让网络通信变得简单
+To make it easier to handle problems anytime
+让处理问题变得简单
