@@ -156,7 +156,6 @@ function changeForm(obj, header){
 		bodyData=arr.join('&');
 		header.body=bodyData;
 	}else if ((obj.request.header['Content-Type']).toLowerCase()=='form data'){
-		header.headers['Content-Type']='Form Data';
 		let bodyData = new FormData();
 		for ( [k, v] of Object.entries(obj.request.data)){
 			if (typeof(v)=='object'){
