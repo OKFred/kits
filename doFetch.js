@@ -14,7 +14,7 @@
 
 /*
 An object to send, save & describe the data
-以下先创建一个对象，用于发送，保存和描述该对象
+以下先创建一个对象，用于发送，保存和描述该数据
 
 Parameters 候选参数
 	"method": ["POST","GET"]
