@@ -13,6 +13,20 @@
 
 /*
 
+An object to describe the node structure
+Will read data properties when use array
+
+以下先创建一个对象，用于描述节点结构
+使用数组会对应转化成数据的属性
+
+Parameters 候选参数：
+
+	"tag":""	//节点标签 (string)
+	"attributes" //节点属性 (string)
+	"innerText"	//节点文本	(string|array)
+	"children"	//后代节点	(string)
+	"copies"	//重复创建 (integer|array) 
+	
 */
 
 
