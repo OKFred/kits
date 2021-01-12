@@ -1,10 +1,14 @@
   
 /*\
-| | Let's say you have want to create a new Element with object.
-| | And you want to match the data with this element. 
+| | Let's say you want to create a node based on some data.
+| | You already known the data and the node type.
+| | Firstly, I'd create an object for the node structure.
+| | And then we will have the data attached.
 | | 
-| | 如果你想要用对象的形式去创建一个元素。
-| | 然后数据匹配到该元素。
+| | 假设你需要根据某些数据去创建一个节点。
+| | 你已经了解了数据和节点类型。
+| | 首先我会创建一个形容节点结构的对象。
+| | 然后我会把数据附上。
 \*/
 
 /*
@@ -15,13 +19,13 @@
 function app(){
 	let data=[
 		{
-			'new':{
-				'startDate': '2020-01-01',
+			'course':{
+				'startDate': '2019-03-01',
 				'courseName': '挖掘机'
 			}
 		},
 		{
-			'new':{
+			'course':{
 				'startDate': '2021-01-02',
 				'courseName': '编程'
 			}
@@ -79,11 +83,11 @@ function app(){
 							},
 							{
 								"tag": "td",
-								"innerText": ['new','startDate']
+								"innerText": ['course','startDate']
 							},
 							{
 								"tag": "td",
-								"innerText": ['new','courseName']
+								"innerText": ['course','courseName']
 							}
 						]
 					}
