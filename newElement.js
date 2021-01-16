@@ -31,7 +31,7 @@ Parameters 候选参数：
 
 
 function app(){
-	let data=[
+	data=[
 		{
 			'course':{
 				'startDate': '2019-03-01',
