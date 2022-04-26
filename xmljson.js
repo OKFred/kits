@@ -10,24 +10,27 @@
 
 function xmljson(xml){
     let xmldom = new DOMParser().parseFromString(xml, 'text/xml');
-    let {children, nodeName, nodeValue, attributes}=xmldom;
-    let childrenArr;
-    if (children && children.length){
-        childrenArr=[];
-        for (let subxml of children){
-            let subobj=xmljson(subxml)
-            childrenArr.push(subobj);
+    let tojson=(xmldom)=>{
+        let {children, nodeName, nodeValue, attributes}=xmldom;
+        let childrenArr;
+        if (children && children.length){
+            childrenArr=[];
+            for (let subxml of children){
+                let subobj=tojson(subxml)
+                childrenArr.push(subobj);
+            }
         }
-    }
-    let attributeObj;
-    if (attributes && attributes.length){
-        attributeObj={};
-        for (let attr of attributes){
-            attributeObj[attr.nodeName]=attr.nodeValue;
+        let attributeObj;
+        if (attributes && attributes.length){
+            attributeObj={};
+            for (let attr of attributes){
+                attributeObj[attr.nodeName]=attr.nodeValue;
+            }
         }
+        let obj=[nodeName, nodeValue, attributeObj, childrenArr];
+        //if (childrenArr) obj.children=childrenArr;
+        //if (attributeObj) obj.attributes=attributeObj;
+        return obj;
     }
-    let obj={nodeName, nodeValue};
-    if (childrenArr) obj.children=childrenArr;
-    if (attributeObj) obj.attributes=attributeObj;
-    return obj;
+    return tojson(xmldom);
 }
